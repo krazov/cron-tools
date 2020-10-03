@@ -1,0 +1,19 @@
+{
+  "name": "cron-diff",
+  "version": "0.1.0",
+  "description": "Function calculating a diff between two cron definitions",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "cron",
+    "diff",
+    "util"
+  ],
+  "author": "Jon Krazov <krazov@protonmail.ch>",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^26.4.2"
+  }
+}
