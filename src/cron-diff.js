@@ -1,32 +1,39 @@
-const parsedCron = require('./parsed-cron');
-const { intervals, DAY_OF_MONTH } = require('./intervals');
+const { parsedCron } = require('./parsed-cron');
+const { DAY_OF_MONTH } = require('./intervals');
 const range = require('./range');
 
 function cronDiff(cron1, cron2) {
-    const parsed1 = parsedCron(cron1);
-    const parsed2 = parsedCron(cron2);
+    const {
+        values: parsed1,
+        count,
+        labels,
+    } = parsedCron(cron1);
 
-    const itemsCount = Math.min(Object.keys(parsed1), Object.keys(parsed2));
-    const withSeconds = itemsCount == 6;
+    const {
+        values: parsed2,
+        count: count2,
+    } = parsedCron(cron2);
+
+    if (count != count2) throw Error('Mismatched crons.');
 
     const response = [];
 
-    for (const interval of intervals({ withSeconds })) {
-        const int1 = parsed1[interval];
-        const int2 = parsed2[interval];
+    for (const label of labels) {
+        const interval1 = parsed1[label];
+        const interval2 = parsed2[label];
 
         // covers the same values, including *
-        if (int1 == int2) continue;
+        if (interval1 == interval2) continue;
 
-        const diff = int2 - int1;
+        const diff = interval2 - interval1;
 
         if (diff > 0) {
-            response.push({ type: interval, value: diff });
+            response.push({ type: label, value: diff });
         } else {
-            if (interval == DAY_OF_MONTH) throw Error('We regret to inform it’s not possible to calculate this value for a day of a month.');
+            if (label == DAY_OF_MONTH) throw Error('We regret to inform it’s not possible to calculate this value for a day of a month.');
 
-            const [min, max] = range(interval);
-            response.push({ type: interval, value: max + 1 - min + diff });
+            const [min, max] = range(label);
+            response.push({ type: label, value: max + 1 - min + diff });
         }
     }
 
