@@ -2,17 +2,17 @@ const { intervals } = require('./intervals');
 
 function parsedCron(cron) {
     const array = cron.split(/\s/);
-    const itemsCount = array.length;
-    const withSeconds = itemsCount == 6;
+    const count = array.length;
+    const withSeconds = count == 6;
     const labels = intervals({ withSeconds });
 
-    const response = {};
+    const values = {};
 
-    for (let i = 0; i < itemsCount; i++) {
-        response[labels[i]] = array[i];
+    for (let i = 0; i < count; i++) {
+        values[labels[i]] = array[i];
     }
 
-    return response;
+    return { labels, values, count };
 }
 
-module.exports = parsedCron;
+module.exports = { parsedCron };
