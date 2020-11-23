@@ -1,7 +1,25 @@
 const cronDiff = require('./cron-diff');
 
 describe('cronDiff(..)', () => {
-    // describe('should reject handling mismatched crons');
+    it('should reject handling mismatched crons', () => {
+        expect(() => { cronDiff('10 * * * *', '* 4 * * *'); }).toThrowError();
+    });
+
+    it('should return object with 0 value if there were values and skip if had stars', () => {
+        const actual = cronDiff('10 3 * * *', '10 4 * * *');
+        const expected = [
+            {
+                type: 'minute',
+                value: 0,
+            },
+            {
+                type: 'hour',
+                value: 1,
+            },
+        ];
+
+        expect(actual).toMatchObject(expected);
+    });
 
     describe('for crons with one value,', () => {
         it('should work with a positive diff of minutes', () => {
@@ -55,9 +73,7 @@ describe('cronDiff(..)', () => {
         });
 
         it('should throw an error for a negative diff of days of a month', () => {
-            const actual =
-
-                expect(() => { cronDiff('* * 11 * *', '* * 10 * *'); }).toThrowError();
+            expect(() => { cronDiff('* * 11 * *', '* * 10 * *'); }).toThrowError();
         });
 
         it('should work with a positive diff of months', () => {
@@ -176,6 +192,4 @@ describe('cronDiff(..)', () => {
             expect(actual).toMatchObject(expected);
         });
     });
-
-    // describe('should return object with 0 value if there were values and skip if had stars');
 });
