@@ -1,24 +1,32 @@
 const cronDiff = require('./cron-diff');
 
 describe('cronDiff(..)', () => {
-    it('should reject handling mismatched crons', () => {
-        expect(() => { cronDiff('10 * * * *', '* 4 * * *'); }).toThrowError();
+    describe('generally speaking', () => {
+        it('should return object with 0 value if there were values and skip if had stars', () => {
+            const actual = cronDiff('10 3 * * *', '10 4 * * *');
+            const expected = [
+                {
+                    type: 'minute',
+                    value: 0,
+                },
+                {
+                    type: 'hour',
+                    value: 1,
+                },
+            ];
+
+            expect(actual).toMatchObject(expected);
+        });
     });
 
-    it('should return object with 0 value if there were values and skip if had stars', () => {
-        const actual = cronDiff('10 3 * * *', '10 4 * * *');
-        const expected = [
-            {
-                type: 'minute',
-                value: 0,
-            },
-            {
-                type: 'hour',
-                value: 1,
-            },
-        ];
+    describe('for incorrect values', () => {
+        it('should reject handling empty crons', () => {
+            expect(() => { cronDiff('', ''); }).toThrowError();
+        });
 
-        expect(actual).toMatchObject(expected);
+        it('should reject handling mismatched crons', () => {
+            expect(() => { cronDiff('10 * * * *', '* 4 * * *'); }).toThrowError();
+        });
     });
 
     describe('for crons with one value,', () => {
@@ -190,6 +198,22 @@ describe('cronDiff(..)', () => {
             ];
 
             expect(actual).toMatchObject(expected);
+        });
+    });
+
+    describe('for crons with day of the month and month', () => {
+        it('should calculate days of the month for the consecutive months', () => {
+            const actual = cronDiff('* * 4 3 *', '* * 3 4 *');
+            const expected = [
+                {
+                    type: 'dayofMonth',
+                    value: 30,
+                },
+                {
+                    type: 'month',
+                    value: 0,
+                },
+            ];
         });
     });
 });

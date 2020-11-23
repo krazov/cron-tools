@@ -2,10 +2,13 @@ const { parsedCron } = require('./parsed-cron');
 const { DAY_OF_MONTH } = require('./intervals');
 const range = require('./range');
 
+const emptyStringError = 'C’mon, empty string?';
 const mismatchedError = 'We regret to inform that crons are mismatched, thus, cannot be compared.';
 const dayOfMonthError = 'We regret to inform that it’s not possible to calculate this value for a day of a month.';
 
 function cronDiff(cron1, cron2) {
+    if (cron1 === '' || cron2 === '') throw Error(emptyStringError);
+
     const {
         values: parsed1,
         count,
