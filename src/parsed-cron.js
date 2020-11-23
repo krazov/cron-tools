@@ -3,7 +3,8 @@ const { intervals } = require('./intervals');
 function parsedCron(cron) {
     const array = cron.split(/\s/);
     const count = array.length;
-    const labels = intervals({ withSeconds: count == 6 });
+    const withSeconds = count == 6;
+    const labels = intervals({ withSeconds });
 
     const values = {};
 
@@ -14,4 +15,4 @@ function parsedCron(cron) {
     return { labels, values, count };
 }
 
-module.exports = parsedCron;
+module.exports = { parsedCron };
