@@ -233,9 +233,9 @@ describe('cronDiff(..)', () => {
 
             expect(actual).toMatchObject(expected);
         });
-    });
 
-    it('should throw an error for the consecutive months: 28 days (but no year)', () => {
-        expect(() => { cronDiff('* * 4 2 *', '* * 3 3 *'); }).toThrowError();
+        it('should throw an error for the consecutive months: 28 days (but no year)', () => {
+            expect(() => { cronDiff('* * 4 2 *', '* * 3 3 *'); }).toThrowError();
+        });
     });
 });
