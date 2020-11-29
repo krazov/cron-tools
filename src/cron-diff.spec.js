@@ -202,11 +202,11 @@ describe('cronDiff(..)', () => {
     });
 
     describe('for crons with day of the month and month', () => {
-        it('should calculate days of the month for the consecutive months', () => {
+        it('should calculate days of the month for the consecutive months: 31 days', () => {
             const actual = cronDiff('* * 4 3 *', '* * 3 4 *');
             const expected = [
                 {
-                    type: 'dayofMonth',
+                    type: 'dayOfMonth',
                     value: 30,
                 },
                 {
@@ -214,6 +214,28 @@ describe('cronDiff(..)', () => {
                     value: 0,
                 },
             ];
+
+            expect(actual).toMatchObject(expected);
         });
+
+        it('should calculate days of the month for the consecutive months: 30 days', () => {
+            const actual = cronDiff('* * 4 4 *', '* * 3 5 *');
+            const expected = [
+                {
+                    type: 'dayOfMonth',
+                    value: 29,
+                },
+                {
+                    type: 'month',
+                    value: 0,
+                },
+            ];
+
+            expect(actual).toMatchObject(expected);
+        });
+    });
+
+    it('should throw an error for the consecutive months: 28 days (but no year)', () => {
+        expect(() => { cronDiff('* * 4 2 *', '* * 3 3 *'); }).toThrowError();
     });
 });
