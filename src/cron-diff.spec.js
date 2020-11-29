@@ -1,7 +1,7 @@
 const cronDiff = require('./cron-diff');
 
 describe('cronDiff(..)', () => {
-    describe('generally speaking', () => {
+    describe('generally speaking,', () => {
         it('should return object with 0 value if there were values and skip if had stars', () => {
             const actual = cronDiff('10 3 * * *', '10 4 * * *');
             const expected = [
@@ -19,7 +19,7 @@ describe('cronDiff(..)', () => {
         });
     });
 
-    describe('for incorrect values', () => {
+    describe('for incorrect values,', () => {
         it('should reject handling empty crons', () => {
             expect(() => { cronDiff('', ''); }).toThrowError();
         });
@@ -201,7 +201,7 @@ describe('cronDiff(..)', () => {
         });
     });
 
-    describe('for crons with day of the month and month', () => {
+    describe('for crons with day of the month and month,', () => {
         it('should calculate days of the month for the consecutive months: 31 days', () => {
             const actual = cronDiff('* * 4 3 *', '* * 3 4 *');
             const expected = [
